@@ -3,6 +3,9 @@ import cookieSession from "cookie-session";
 import * as dotenv from "dotenv";
 import express from "express";
 import { connectDB } from "./config/dbConfig";
+import { errorHander } from "./middleware/errorHandler";
+import { routeNotFoundHander } from "./middleware/routeNotFoundHandler";
+import { authRouter } from "./routes/authRoutes";
 
 const app = express();
 
@@ -13,6 +16,11 @@ connectDB();
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cookieSession({ keys: ["laskdjf"] }));
+app.use(authRouter);
+
+app.use(errorHander);
+
+app.use(routeNotFoundHander);
 
 const port = process.env.PORT || 3001;
 
