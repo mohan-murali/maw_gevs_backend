@@ -1,6 +1,6 @@
-import { Router } from "express";
-import { uvcModel } from "../models/uvc";
-import { VoterModel } from "../models/voter";
+const { Router } = require("express");
+const uvcModel = require("../models/uvc");
+const VoterModel = require("../models/voter");
 
 const authRouter = Router();
 const JWT_KEY = process.env.JWT_KEY || "";
@@ -122,4 +122,4 @@ authRouter.post("/login", async (req, res) => {
   }
 });
 
-export { authRouter };
+module.exports = authRouter;

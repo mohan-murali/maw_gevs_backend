@@ -1,4 +1,5 @@
-import { model, Schema } from "mongoose";
+const mongoose = require("mongoose");
+const { model, Schema } = mongoose;
 
 const uvcSchema = new Schema({
   uvcCode: {
@@ -11,4 +12,4 @@ const uvcSchema = new Schema({
   },
 });
 
-export const uvcModel = model("Uvc", uvcSchema);
+module.exports = model("Uvc", uvcSchema);

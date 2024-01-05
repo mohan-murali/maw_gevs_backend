@@ -1,4 +1,5 @@
-import { Schema, model } from "mongoose";
+const mongoose = require("mongoose");
+const { model, Schema } = mongoose;
 
 const voterSchema = new Schema({
   voterId: {
@@ -27,7 +28,7 @@ const voterSchema = new Schema({
   },
   hasVoted: {
     type: Boolean,
-  }
+  },
 });
 
 export const VoterModel = model("Voter", voterSchema);

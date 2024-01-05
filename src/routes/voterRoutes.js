@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { authHandler } from "../middleware/authHandler";
 import { CandidateModel } from "../models/candidate";
+import { PartyModel } from "../models/party";
 import { VoterModel } from "../models/voter";
 
 const voterRouter = Router();
@@ -54,4 +55,40 @@ voterRouter.post("/vote", authHandler, async (req, res) => {
   }
 });
 
-export { voterRouter };
+voterRouter.post("/candidate", async (req, res) => {
+  try {
+    const { candidate, party, constituency } = req;
+    const newCandidate = new CandidateModel({
+      candidate,
+      party,
+      constituency,
+      voterCount: 0,
+    });
+    await newCandidate.save();
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: `Not able to vote due to the error: ${err}`,
+    });
+  }
+});
+
+voterRouter.post("/party", async (req, res) => {
+  try {
+    const { party } = req;
+    const newParty = new PartyModel({
+      party,
+      seatCount: 0,
+    });
+    await newParty.save();
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: `Not able to vote due to the error: ${err}`,
+    });
+  }
+});
+
+module.exports = voterRouter;
