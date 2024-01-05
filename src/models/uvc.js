@@ -11,4 +11,4 @@ const uvcSchema = new Schema({
   },
 });
 
-export const uvcModel = model("uvc", uvcSchema);
+export const uvcModel = model("Uvc", uvcSchema);
