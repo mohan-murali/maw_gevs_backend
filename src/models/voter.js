@@ -25,6 +25,9 @@ const voterSchema = new Schema({
     type: Boolean,
     required: true,
   },
+  hasVoted: {
+    type: Boolean,
+  }
 });
 
 export const VoterModel = model("Voter", voterSchema);
