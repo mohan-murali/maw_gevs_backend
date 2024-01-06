@@ -1,11 +1,10 @@
-import { Router } from "express";
-import { authHandler } from "../middleware/authHandler";
-import { CandidateModel } from "../models/candidate";
-import { PartyModel } from "../models/party";
-import { VoterModel } from "../models/voter";
+const { Router } = require("express");
+const authHandler = require("../middleware/authHandler");
+const CandidateModel = require("../models/candidate");
+const PartyModel = require("../models/party");
+const VoterModel = require("../models/voter");
 
 const voterRouter = Router();
-const JWT_KEY = process.env.JWT_KEY || "";
 
 voterRouter.get("/candidate", authHandler, async (req, res) => {
   try {

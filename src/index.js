@@ -3,6 +3,7 @@ const cookieSession = require("cookie-session");
 const errorHander = require("./middleware/errorHandler");
 const routeNotFoundHander = require("./middleware/routeNotFoundHandler");
 const authRouter = require("./routes/authRoutes");
+const voterRouter = require("./routes/voterRoutes");
 const express = require("express");
 const connectDB = require("./config/dbConfig");
 
@@ -15,7 +16,7 @@ connectDB();
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cookieSession({ keys: ["laskdjf"] }));
-app.use(authRouter, voter);
+app.use(authRouter, voterRouter);
 
 app.use(errorHander);
 

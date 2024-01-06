@@ -12,4 +12,4 @@ const partySchema = new Schema({
   },
 });
 
-export const PartyModel = model("Party", partySchema);
+module.exports = model("Party", partySchema);

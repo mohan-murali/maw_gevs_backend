@@ -12,4 +12,4 @@ const electionSchema = new Schema({
   },
 });
 
-export const ElectionModel = model("Election", electionSchema);
+module.exports = model("Election", electionSchema);

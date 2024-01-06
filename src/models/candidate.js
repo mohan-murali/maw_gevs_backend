@@ -20,4 +20,4 @@ const candidateSchema = new Schema({
   },
 });
 
-export const CandidateModel = model("Candidate", candidateSchema);
+module.exports = model("Candidate", candidateSchema);

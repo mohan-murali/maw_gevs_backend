@@ -31,4 +31,4 @@ const voterSchema = new Schema({
   },
 });
 
-export const VoterModel = model("Voter", voterSchema);
+module.exports = model("Voter", voterSchema);
