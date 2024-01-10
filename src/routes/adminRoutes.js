@@ -2,6 +2,7 @@ const { Router } = require("express");
 const ElectionModel = require("../models/election");
 const authHandler = require("../middleware/authHandler");
 const CandidateModel = require("../models/candidate");
+const PartyModel = require("../models/party");
 
 const adminRouter = Router();
 
@@ -18,6 +19,11 @@ adminRouter.put("/election", authHandler, async (req, res) => {
           const blueVotes = blueCandidates.reduce((s, c) => s + c.voteCount, 0);
           const yellowVotes = yellowCandidates.reduce((s, c) => s + c.voteCount, 0);
           const independentVotes = independentCandidates.reduce((s, c) => s + c.voteCount, 0);
+
+          await PartyModel.findOneAndUpdate({ party: "Red Party" }, {seatCount: redVotes});
+          await PartyModel.findOneAndUpdate({ party: "Blue Party" }, {seatCount: blueVotes});
+          await PartyModel.findOneAndUpdate({ party: "Yellow Party" }, {seatCount: yellowVotes});
+          await PartyModel.findOneAndUpdate({ party: "Independent" }, {seatCount: independentVotes});
 
           const max = Math.max(redVotes, blueVotes, yellowVotes, independentVotes);
           let winner;
