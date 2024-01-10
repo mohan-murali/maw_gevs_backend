@@ -66,6 +66,5 @@ adminRouter.get("/election-status", authHandler, async (req, res) => {
   }
 });
 
-adminRouter.get("")
 
 module.exports = adminRouter;
