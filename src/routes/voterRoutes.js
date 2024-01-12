@@ -3,8 +3,12 @@ const authHandler = require("../middleware/authHandler");
 const CandidateModel = require("../models/candidate");
 const PartyModel = require("../models/party");
 const VoterModel = require("../models/voter");
-
+const UvcModel = require("../models/uvc.js");
 const voterRouter = Router();
+
+voterRouter.get("/", (req, res) => {
+  res.status(200);
+});
 
 voterRouter.get("/candidate", authHandler, async (req, res) => {
   try {
@@ -33,7 +37,7 @@ voterRouter.get("/candidate", authHandler, async (req, res) => {
 
 voterRouter.post("/vote", authHandler, async (req, res) => {
   try {
-    const { user, candidate } = req;
+    const { user, candidate } = req.body;
     await VoterModel.findByIdAndUpdate(user._id, {
       hasVoted: true,
     });
@@ -56,7 +60,8 @@ voterRouter.post("/vote", authHandler, async (req, res) => {
 
 voterRouter.post("/candidate", async (req, res) => {
   try {
-    const { candidate, party, constituency } = req;
+    const { candidate, party, constituency } = req.body;
+    console.log(candidate, party, constituency);
     const newCandidate = new CandidateModel({
       candidate,
       party,
@@ -75,10 +80,29 @@ voterRouter.post("/candidate", async (req, res) => {
 
 voterRouter.post("/party", async (req, res) => {
   try {
-    const { party } = req;
+    const { party } = req.body;
+    console.log(req);
     const newParty = new PartyModel({
       party,
       seatCount: 0,
+    });
+    await newParty.save();
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: `Not able to vote due to the error: ${err}`,
+    });
+  }
+});
+
+voterRouter.post("/uvcCodes", async (req, res) => {
+  try {
+    console.log(req.body);
+    const { uvcCode } = req.body;
+    const newParty = new UvcModel({
+      uvcCode,
+      isUsed: false,
     });
     await newParty.save();
   } catch (err) {

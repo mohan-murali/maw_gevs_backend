@@ -1,16 +1,18 @@
 const { Router } = require("express");
 const uvcModel = require("../models/uvc");
 const VoterModel = require("../models/voter");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const authRouter = Router();
-const JWT_KEY = process.env.JWT_KEY || "";
+const JWT_KEY = process.env.JWT_KEY || "secret";
 
 authRouter.post("/register", async (req, res) => {
   try {
     const { voterId, password, name, dob, uvcCode, constituency } = req.body;
     if (voterId && password && name && dob && uvcCode && constituency) {
       const existingVoter = VoterModel.findOne({ voterId });
-      if (existingVoter) {
+      if (existingVoter._id) {
         res.status(400).json({
           success: false,
           message: "User already exists",
@@ -19,12 +21,14 @@ authRouter.post("/register", async (req, res) => {
 
       let usedUvcCode = uvcModel.findOne({ uvcCode });
       if (!usedUvcCode) {
+        console.log("invalid uvc code");
         res.status(400).json({
           success: false,
           message: "invalid uvc code",
         });
       }
       if (usedUvcCode.isUsed) {
+        console.log("uvc already used");
         res.status(400).json({
           success: false,
           message: "UVC code is already used",
@@ -72,7 +76,7 @@ authRouter.post("/register", async (req, res) => {
   } catch (e) {
     res.status(500).json({
       success: false,
-      message: `cannot register user, error: ${err}`,
+      message: `cannot register user, error: ${e}`,
     });
   }
 });
@@ -80,6 +84,7 @@ authRouter.post("/register", async (req, res) => {
 authRouter.post("/login", async (req, res) => {
   try {
     const { voterId, password } = req.body;
+    console.log(voterId, password);
 
     if (voterId && password) {
       //Check if the voterId and password is correct

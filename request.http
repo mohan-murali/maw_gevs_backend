@@ -1,0 +1,50 @@
+POST http://localhost:5001/api/voter/uvcCodes
+Content-Type: application/json
+
+{
+  "uvcCode": "WL3K3YPT"
+}
+
+###
+GET http://localhost:5001/api/voter
+
+###
+POST http://localhost:5001/api/auth/register
+Content-Type: application/json
+
+{
+  "voterId": "pishon@test.com",
+  "password": "test",
+  "name": "pishon",
+  "dob": "Mon Jan 01 2024 00:00:00 GMT+0000 (Greenwich Mean Time)",
+  "uvcCode": "BBMNS9ZJ",
+  "constituency": "Shangri-la-Town"
+}
+
+###
+POST http://localhost:5001/api/auth/login
+Content-Type: application/json
+
+{
+  "password": "test",
+    "voterId":"pishon@test.com"
+}
+
+###
+POST http://localhost:5001/api/voter/candidate
+Content-Type: "application/json"
+
+{
+   "candidate": "b1c1",
+   "party": "Blue Party",
+   "constituency": "Shangri-la-Town"
+
+}
+
+###
+POST http://localhost:5001/api/voter/party
+Content-Type: "application/json"
+
+{
+    "party": "Blue Party"
+}
