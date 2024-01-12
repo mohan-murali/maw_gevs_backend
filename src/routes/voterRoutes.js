@@ -66,9 +66,12 @@ voterRouter.post("/candidate", async (req, res) => {
       candidate,
       party,
       constituency,
-      voterCount: 0,
+      voteCount: 0,
     });
     await newCandidate.save();
+    res.status(200).json({
+      success: true,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({
@@ -87,6 +90,9 @@ voterRouter.post("/party", async (req, res) => {
       seatCount: 0,
     });
     await newParty.save();
+    res.status(200).json({
+      success: true,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({
@@ -105,6 +111,9 @@ voterRouter.post("/uvcCodes", async (req, res) => {
       isUsed: false,
     });
     await newParty.save();
+    res.status(200).json({
+      success: true,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({
