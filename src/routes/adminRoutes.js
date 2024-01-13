@@ -6,49 +6,71 @@ const PartyModel = require("../models/party");
 
 const adminRouter = Router();
 
-adminRouter.put("/election", authHandler, async (req, res) => {
+adminRouter.post("/election", authHandler, async (req, res) => {
   try {
-    const { status } = req;
-      if (status === "Completed") {
-          const redCandidates = await CandidateModel.find({ party: "Red Party" });
-          const blueCandidates = await CandidateModel.find({ party: "Blue Party" });
-          const yellowCandidates = await CandidateModel.find({ party: "Yellow Party" });
-          const independentCandidates = await CandidateModel.find({ party: "Independent" });
+    const { status } = req.body;
+    if (status === "Completed") {
+      const redCandidates = await CandidateModel.find({ party: "Red Party" });
+      const blueCandidates = await CandidateModel.find({ party: "Blue Party" });
+      const yellowCandidates = await CandidateModel.find({
+        party: "Yellow Party",
+      });
+      const independentCandidates = await CandidateModel.find({
+        party: "Independent",
+      });
 
-          const redVotes = redCandidates.reduce((s, c) => s + c.voteCount, 0);
-          const blueVotes = blueCandidates.reduce((s, c) => s + c.voteCount, 0);
-          const yellowVotes = yellowCandidates.reduce((s, c) => s + c.voteCount, 0);
-          const independentVotes = independentCandidates.reduce((s, c) => s + c.voteCount, 0);
+      const redVotes = redCandidates.reduce((s, c) => s + c.voteCount, 0);
+      const blueVotes = blueCandidates.reduce((s, c) => s + c.voteCount, 0);
+      const yellowVotes = yellowCandidates.reduce((s, c) => s + c.voteCount, 0);
+      const independentVotes = independentCandidates.reduce(
+        (s, c) => s + c.voteCount,
+        0
+      );
 
-          await PartyModel.findOneAndUpdate({ party: "Red Party" }, {seatCount: redVotes});
-          await PartyModel.findOneAndUpdate({ party: "Blue Party" }, {seatCount: blueVotes});
-          await PartyModel.findOneAndUpdate({ party: "Yellow Party" }, {seatCount: yellowVotes});
-          await PartyModel.findOneAndUpdate({ party: "Independent" }, {seatCount: independentVotes});
+      await PartyModel.findOneAndUpdate(
+        { party: "Red Party" },
+        { seatCount: redVotes }
+      );
+      await PartyModel.findOneAndUpdate(
+        { party: "Blue Party" },
+        { seatCount: blueVotes }
+      );
+      await PartyModel.findOneAndUpdate(
+        { party: "Yellow Party" },
+        { seatCount: yellowVotes }
+      );
+      await PartyModel.findOneAndUpdate(
+        { party: "Independent" },
+        { seatCount: independentVotes }
+      );
 
-          const max = Math.max(redVotes, blueVotes, yellowVotes, independentVotes);
-          let winner;
-          if (max === redVotes) {
-              winner = "Red Party";
-          } else if (max === blueVotes) {
-              winner = "Blue Party"
-          } else if (max === yellowVotes) {
-              winner = "Yellow Party"
-          } else {
-              winner = "Independent"
-          }
-
-          const election = await ElectionModel.findOneAndUpdate({}, { status, winner });
-          res.status(200).json({
-              success: true,
-              election,
-          });
+      const max = Math.max(redVotes, blueVotes, yellowVotes, independentVotes);
+      let winner;
+      if (max === redVotes) {
+        winner = "Red Party";
+      } else if (max === blueVotes) {
+        winner = "Blue Party";
+      } else if (max === yellowVotes) {
+        winner = "Yellow Party";
       } else {
-          const election = await ElectionModel.findOneAndUpdate({}, { status });
-          res.status(200).json({
-              success: true,
-              election,
-          });
+        winner = "Independent";
       }
+
+      const election = await ElectionModel.findOneAndUpdate(
+        {},
+        { status, winner }
+      );
+      res.status(200).json({
+        success: true,
+        election,
+      });
+    } else {
+      const election = await ElectionModel.findOneAndUpdate({}, { status });
+      res.status(200).json({
+        success: true,
+        election,
+      });
+    }
   } catch (e) {
     res.status(500).json({
       success: false,
@@ -71,6 +93,5 @@ adminRouter.get("/election-status", authHandler, async (req, res) => {
     });
   }
 });
-
 
 module.exports = adminRouter;

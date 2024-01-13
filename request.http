@@ -13,12 +13,8 @@ POST http://localhost:5001/api/auth/register
 Content-Type: application/json
 
 {
-  "voterId": "pishon@test.com",
-  "password": "test",
-  "name": "pishon",
-  "dob": "Mon Jan 01 2024 00:00:00 GMT+0000 (Greenwich Mean Time)",
-  "uvcCode": "BBMNS9ZJ",
-  "constituency": "Shangri-la-Town"
+  "voterId": "election@shangrila.gov.sr",
+  "password": "shangrila2024$"
 }
 
 ###
