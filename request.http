@@ -44,3 +44,13 @@ Content-Type: "application/json"
 {
     "party": "Blue Party"
 }
+
+###
+GET http://localhost:5001/api/admin/election-status
+Content-Type: "application/json"
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWExNjg1YzcyNTFlMWI1OTgxNzI1OGIiLCJpYXQiOjE3MDUxNjAzMTUsImV4cCI6MTcwNTI0NjcxNX0.YFgLNaK5hPU3CWCmidZpViVlKFIHafHcbwNweDT38ME
+
+###
+GET http://localhost:5001/api/voter/candidate
+Content-Type: "application/json"
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWExNjg1YzcyNTFlMWI1OTgxNzI1OGIiLCJpYXQiOjE3MDUxNzQ4OTIsImV4cCI6MTcwNTI2MTI5Mn0.s6Xoo40vLZ6sdWUZzonBbpP7vCBotEBQ_l3Ig_Ru8Yo

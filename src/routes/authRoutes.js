@@ -93,6 +93,7 @@ authRouter.post("/login", async (req, res) => {
       if (user) {
         const passwordMatched = await bcrypt.compare(password, user.password);
         if (passwordMatched) {
+          console.log("JWT key is ", JWT_KEY);
           const token = jwt.sign({ userId: user._id }, JWT_KEY, {
             expiresIn: "24h",
           });

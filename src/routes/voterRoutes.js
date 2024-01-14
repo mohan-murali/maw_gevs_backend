@@ -13,6 +13,7 @@ voterRouter.get("/", (req, res) => {
 voterRouter.get("/candidate", authHandler, async (req, res) => {
   try {
     const user = req.user;
+    console.log("the user is ", user);
     const candidates = await CandidateModel.find({
       constituency: user.constituency,
     });
@@ -37,7 +38,8 @@ voterRouter.get("/candidate", authHandler, async (req, res) => {
 
 voterRouter.post("/vote", authHandler, async (req, res) => {
   try {
-    const { user, candidate } = req.body;
+    const { user } = req;
+    const { candidate } = req.body;
     await VoterModel.findByIdAndUpdate(user._id, {
       hasVoted: true,
     });

@@ -3,12 +3,14 @@ const ElectionModel = require("../models/election");
 const authHandler = require("../middleware/authHandler");
 const CandidateModel = require("../models/candidate");
 const PartyModel = require("../models/party");
+const VoterModel = require("../models/voter");
 
 const adminRouter = Router();
 
-adminRouter.post("/election", authHandler, async (req, res) => {
+adminRouter.post("/election", async (req, res) => {
   try {
     const { status } = req.body;
+    console.log(status);
     if (status === "Completed") {
       const redCandidates = await CandidateModel.find({ party: "Red Party" });
       const blueCandidates = await CandidateModel.find({ party: "Blue Party" });
@@ -58,14 +60,25 @@ adminRouter.post("/election", authHandler, async (req, res) => {
 
       const election = await ElectionModel.findOneAndUpdate(
         {},
-        { status, winner }
+        { status, winner },
+        {
+          new: true,
+        }
       );
+
+      await VoterModel.updateMany({ isAdmin: false }, { hasVoted: false });
       res.status(200).json({
         success: true,
         election,
       });
     } else {
-      const election = await ElectionModel.findOneAndUpdate({}, { status });
+      const election = await ElectionModel.findOneAndUpdate(
+        {},
+        { status, winner: "pending" },
+        {
+          new: true,
+        }
+      );
       res.status(200).json({
         success: true,
         election,
@@ -79,7 +92,7 @@ adminRouter.post("/election", authHandler, async (req, res) => {
   }
 });
 
-adminRouter.get("/election-status", authHandler, async (req, res) => {
+adminRouter.get("/election-status", async (req, res) => {
   try {
     const election = await ElectionModel.findOne({});
     res.status(200).json({
