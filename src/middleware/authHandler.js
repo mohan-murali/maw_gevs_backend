@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const VoterModel = require("../models/voter");
+const UserModel = require("../models/user");
 
 const JWT_KEY = process.env.JWT_KEY || "secret";
 const authHandler = async (req, res, next) => {
@@ -18,7 +18,7 @@ const authHandler = async (req, res, next) => {
   try {
     console.log("JWT_Key is ->", JWT_KEY);
     const usr = jwt.verify(token, JWT_KEY);
-    const user = await VoterModel.findById(usr.userId);
+    const user = await UserModel.findById(usr.userId);
 req.user = user;
     next();
   } catch (err) {

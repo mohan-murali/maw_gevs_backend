@@ -4,7 +4,7 @@ const routeNotFoundHander = require("./middleware/routeNotFoundHandler");
 const authRouter = require("./routes/authRoutes");
 const voterRouter = require("./routes/voterRoutes");
 const gevsRouter = require("./routes/gevsRoutes");
-const adminRouter = require("./routes/adminRoutes");
+const topicRouter = require("./routes/topicRoutes");
 const express = require("express");
 const connectDB = require("./config/dbConfig");
 const cors = require("cors");
@@ -21,9 +21,9 @@ app.use(express.urlencoded());
 
 app.use(cookieSession({ keys: ["laskdjf"] }));
 app.use("/api/auth", authRouter);
-app.use("/api/voter", voterRouter);
-app.use("/api/admin", adminRouter);
-app.use("/gevs", gevsRouter);
+app.use("/api/topic", topicRouter);
+// app.use("/api/admin", adminRouter);
+// app.use("/gevs", gevsRouter);
 
 app.use(errorHander);
 

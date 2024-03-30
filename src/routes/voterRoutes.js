@@ -2,7 +2,7 @@ const { Router } = require("express");
 const authHandler = require("../middleware/authHandler");
 const CandidateModel = require("../models/candidate");
 const PartyModel = require("../models/party");
-const VoterModel = require("../models/voter");
+const UserModel = require("../models/user");
 const UvcModel = require("../models/uvc.js");
 const voterRouter = Router();
 

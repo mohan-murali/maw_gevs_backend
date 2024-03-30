@@ -1,4 +1,4 @@
-POST http://localhost:5001/api/voter/uvcCodes
+POST http://localhost:5012/api/voter/uvcCodes
 Content-Type: application/json
 
 {
@@ -13,8 +13,10 @@ POST http://localhost:5001/api/auth/register
 Content-Type: application/json
 
 {
-  "voterId": "election@shangrila.gov.sr",
-  "password": "shangrila2024$"
+  "emailId": "pishon@test.com",
+  "password": "test",
+  "name": "Pishon",
+  "role": "Admin"
 }
 
 ###
@@ -27,11 +29,11 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:5001/api/voter/candidate
+POST http://localhost:5002/api/voter/candidate
 Content-Type: "application/json"
 
 {
-   "candidate": "b1c1",
+   "candidate": "b2c1",
    "party": "Blue Party",
    "constituency": "Shangri-la-Town"
 
@@ -48,9 +50,9 @@ Content-Type: "application/json"
 ###
 GET http://localhost:5001/api/admin/election-status
 Content-Type: "application/json"
-x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWExNjg1YzcyNTFlMWI1OTgxNzI1OGIiLCJpYXQiOjE3MDUxNjAzMTUsImV4cCI6MTcwNTI0NjcxNX0.YFgLNaK5hPU3CWCmidZpViVlKFIHafHcbwNweDT38ME
+x-auth-token: eyJhbGciOiJIUzI9NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWExNjg1YzcyNTFlMWI1OTgxNzI1OGIiLCJpYXQiOjE3MDUxNjAzMTUsImV4cCI6MTcwNTI0NjcxNX0.YFgLNaK5hPU3CWCmidZpViVlKFIHafHcbwNweDT38ME
 
 ###
 GET http://localhost:5001/api/voter/candidate
 Content-Type: "application/json"
-x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWExNjg1YzcyNTFlMWI1OTgxNzI1OGIiLCJpYXQiOjE3MDUxNzQ4OTIsImV4cCI6MTcwNTI2MTI5Mn0.s6Xoo40vLZ6sdWUZzonBbpP7vCBotEBQ_l3Ig_Ru8Yo
+x-auth-token: eyJhbGciOiJIUzI-12NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWExNjg1YzcyNTFlMWI1OTgxNzI1OGIiLCJpYXQiOjE3MDUxNzQ4OTIsImV4cCI6MTcwNTI2MTI5Mn0.s6Xoo40vLZ6sdWUZzonBbpP7vCBotEBQ_l3Ig_Ru8Yo
