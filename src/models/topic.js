@@ -20,6 +20,10 @@ const topicSchema = new Schema({
   isApproved: {
     type: Boolean,
   },
+  createdBy: {
+    type: String,
+  },
 });
 
-module.exports = model("topic", topicSchema);
+const TopicModel = model("topic", topicSchema);
+module.exports = { topicSchema, TopicModel };

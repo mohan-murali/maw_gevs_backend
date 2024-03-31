@@ -23,7 +23,7 @@ app.use(cookieSession({ keys: ["laskdjf"] }));
 app.use("/api/auth", authRouter);
 app.use("/api/topic", topicRouter);
 // app.use("/api/admin", adminRouter);
-app.use("/prefrence", prefrenceRounter);
+app.use("/api/prefrence", prefrenceRounter);
 
 app.use(errorHander);
 

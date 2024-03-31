@@ -1,10 +1,12 @@
 const { Router } = require("express");
-const TopicModel = require("../models/topic");
+const { TopicModel } = require("../models/topic");
+const authHandler = require("../middleware/authHandler");
 
 const topicRouter = Router();
 
-topicRouter.post("/add-topic", async (req, res) => {
+topicRouter.post("/add-topic", authHandler, async (req, res) => {
   try {
+    const { user } = req;
     const { topic, supervisor, details, isCustom } = req.body;
     if (!topic || !supervisor || !details) {
       res.status(400).json({
@@ -19,6 +21,7 @@ topicRouter.post("/add-topic", async (req, res) => {
       details,
       isCustom,
       isApproved: false,
+      createdBy: user.emailId,
     });
 
     await newTopic.save();
@@ -74,6 +77,40 @@ topicRouter.delete("/delete-topic/:id", async (req, res) => {
 topicRouter.get("/get-topic", async (req, res) => {
   try {
     const topics = await TopicModel.find({});
+    res.status(200).json({
+      success: true,
+      topics,
+    });
+  } catch (e) {
+    res.status(500).json({
+      success: false,
+      message: "could not fetch the topic",
+    });
+  }
+});
+
+topicRouter.get("/get-existing-topic", async (req, res) => {
+  try {
+    const topics = await TopicModel.find({ isCustom: false });
+    res.status(200).json({
+      success: true,
+      topics,
+    });
+  } catch (e) {
+    res.status(500).json({
+      success: false,
+      message: "could not fetch the topic",
+    });
+  }
+});
+
+topicRouter.get("/get-proposed-topic", authHandler, async (req, res) => {
+  try {
+    const { user } = req;
+    const topics = await TopicModel.find({
+      isCustom: true,
+      createdBy: user.emailId,
+    });
     res.status(200).json({
       success: true,
       topics,

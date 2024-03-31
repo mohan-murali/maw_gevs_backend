@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-const topic = require("./topic");
 const { model, Schema } = mongoose;
+const { topicSchema } = require("./topic");
 
 const prefrencesSchema = new Schema({
   emailId: {
@@ -8,15 +8,15 @@ const prefrencesSchema = new Schema({
     required: true,
   },
   prefrence1: {
-    type: topic,
+    type: topicSchema,
     required: true,
   },
   prefrence2: {
-    type: topic,
+    type: topicSchema,
     required: true,
   },
   prefrence3: {
-    type: topic,
+    type: topicSchema,
     required: true,
   },
 });
