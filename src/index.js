@@ -8,6 +8,7 @@ const topicRouter = require("./routes/topicRoutes");
 const express = require("express");
 const connectDB = require("./config/dbConfig");
 const cors = require("cors");
+const prefrenceRounter = require("./routes/prefrenceRoutes");
 
 const app = express();
 
@@ -23,7 +24,7 @@ app.use(cookieSession({ keys: ["laskdjf"] }));
 app.use("/api/auth", authRouter);
 app.use("/api/topic", topicRouter);
 // app.use("/api/admin", adminRouter);
-// app.use("/gevs", gevsRouter);
+app.use("/prefrence", prefrenceRounter);
 
 app.use(errorHander);
 
