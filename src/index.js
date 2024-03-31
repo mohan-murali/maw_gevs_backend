@@ -3,7 +3,6 @@ const errorHander = require("./middleware/errorHandler");
 const routeNotFoundHander = require("./middleware/routeNotFoundHandler");
 const authRouter = require("./routes/authRoutes");
 const voterRouter = require("./routes/voterRoutes");
-const gevsRouter = require("./routes/gevsRoutes");
 const topicRouter = require("./routes/topicRoutes");
 const express = require("express");
 const connectDB = require("./config/dbConfig");

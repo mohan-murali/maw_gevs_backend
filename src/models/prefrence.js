@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const topic = require("./topic");
 const { model, Schema } = mongoose;
 
 const prefrencesSchema = new Schema({
@@ -7,16 +8,16 @@ const prefrencesSchema = new Schema({
     required: true,
   },
   prefrence1: {
-    type: String,
+    type: topic,
     required: true,
   },
   prefrence2: {
-    type: String,
-    required: true
+    type: topic,
+    required: true,
   },
   prefrence3: {
-    type: String,
-    required: true
+    type: topic,
+    required: true,
   },
 });
 
