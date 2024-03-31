@@ -22,7 +22,7 @@ authRouter.post("/register", async (req, res) => {
         emailId,
         name,
         password,
-        role
+        role,
       };
       let newUser = new UserModel(user);
       const salt = await bcrypt.genSalt(10);
@@ -37,6 +37,7 @@ authRouter.post("/register", async (req, res) => {
         user: {
           name: newUser.name,
           email: newUser.emailId,
+          role: newUser.role,
         },
         token,
         success: true,
@@ -45,8 +46,7 @@ authRouter.post("/register", async (req, res) => {
     } else {
       res.status(400).json({
         success: false,
-        message:
-          "You need to send email id, name, password, role",
+        message: "You need to send email id, name, password, role",
       });
     }
   } catch (e) {
