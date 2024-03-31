@@ -25,26 +25,18 @@ Content-Type: application/json
 
 {
   "password": "test",
-    "voterId":"pishon@test.com"
+  "voterId":"pishon@test.com"
 }
 
 ###
-POST http://localhost:5002/api/voter/candidate
+POST http://localhost:5001/api/topic/add-topic
 Content-Type: "application/json"
 
 {
-   "candidate": "b2c1",
-   "party": "Blue Party",
-   "constituency": "Shangri-la-Town"
-
-}
-
-###
-POST http://localhost:5001/api/voter/party
-Content-Type: "application/json"
-
-{
-    "party": "Blue Party"
+  "topic": "test topic",
+  "details": "test topic description is very large",
+  "supervisor": "test",
+  "isCustom": false
 }
 
 ###

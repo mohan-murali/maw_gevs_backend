@@ -1,10 +1,9 @@
 const { Router } = require("express");
 const TopicModel = require("../models/topic");
-const authHandler = require("../middleware/authHandler");
 
 const topicRouter = Router();
 
-topicRouter.post("/add-topic", authHandler, async (req, res) => {
+topicRouter.post("/add-topic", async (req, res) => {
   try {
     const { topic, supervisor, details, isCustom } = req.body;
     if (!topic || !supervisor || !details) {
@@ -21,12 +20,14 @@ topicRouter.post("/add-topic", authHandler, async (req, res) => {
       isCustom,
       isApproved: false,
     });
+
     await newTopic.save();
 
     res.status(200).json({
       success: true,
     });
   } catch (e) {
+    console.log(e);
     res.status(500).json({
       success: false,
       message: `could not create the topic`,
@@ -34,7 +35,7 @@ topicRouter.post("/add-topic", authHandler, async (req, res) => {
   }
 });
 
-topicRouter.get("/update-topic", async (req, res) => {
+topicRouter.put("/update-topic", async (req, res) => {
   try {
     const { id, topic, supervisor, details } = req.body;
     await TopicModel.findByIdAndUpdate(id, {
@@ -53,10 +54,12 @@ topicRouter.get("/update-topic", async (req, res) => {
   }
 });
 
-topicRouter.get("/delete-topic", async (req, res) => {
+topicRouter.delete("/delete-topic/:id", async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
+    console.log(id);
     const response = await TopicModel.findByIdAndDelete(id);
+    console.log(response);
     res.status(200).json({
       success: true,
     });
@@ -70,7 +73,6 @@ topicRouter.get("/delete-topic", async (req, res) => {
 
 topicRouter.get("/get-topic", async (req, res) => {
   try {
-    const { id } = req.body;
     const topics = await TopicModel.find({});
     res.status(200).json({
       success: true,
