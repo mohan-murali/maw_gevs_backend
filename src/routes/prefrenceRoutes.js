@@ -8,13 +8,22 @@ prefrenceRounter.post("/submit", authHandler, async (req, res) => {
   try {
     const { user } = req;
     const { prefrence1, prefrence2, prefrence3 } = req.body;
-    const newPrefrence = new PrefrenceModel({
-      emailId: user.emailId,
-      prefrence1,
-      prefrence2,
-      prefrence3,
-    });
-    await newPrefrence.save();
+    const prefrence = await PrefrenceModel.findOne({ emailId: user.emailId });
+    if (prefrence) {
+      await prefrence.updateOne({
+        prefrence1,
+        prefrence2,
+        prefrence3,
+      });
+    } else {
+      const newPrefrence = new PrefrenceModel({
+        emailId: user.emailId,
+        prefrence1,
+        prefrence2,
+        prefrence3,
+      });
+      await newPrefrence.save();
+    }
     res.status(200).json({
       success: true,
     });
