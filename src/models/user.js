@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { model, Schema } = mongoose;
+const { topicSchema } = require("./topic");
 
 const userSchema = new Schema({
   emailId: {
@@ -16,7 +17,10 @@ const userSchema = new Schema({
   },
   role: {
     type: String,
-    required: true
+    required: true,
+  },
+  assignedTopic: {
+    type: topicSchema,
   },
 });
 

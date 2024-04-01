@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const { TopicModel } = require("../models/topic");
+const UserModel = require("../models/user");
 const authHandler = require("../middleware/authHandler");
 
 const topicRouter = Router();
@@ -119,6 +120,47 @@ topicRouter.get("/get-proposed-topic", authHandler, async (req, res) => {
     res.status(500).json({
       success: false,
       message: "could not fetch the topic",
+    });
+  }
+});
+
+topicRouter.get("/get-supervisor-topic", authHandler, async (req, res) => {
+  try {
+    const { user } = req;
+    const topics = await TopicModel.find({
+      isCustom: true,
+      supervisor: user.name,
+    });
+    res.status(200).json({
+      success: true,
+      topics,
+    });
+  } catch (e) {
+    res.status(500).json({
+      success: false,
+      message: "could not fetch the topic",
+    });
+  }
+});
+
+topicRouter.put("/approve-topic", authHandler, async (req, res) => {
+  try {
+    const { id } = req.body;
+    const topic = await TopicModel.findById(id);
+    await topic.updateOne({ isApproved: true });
+    await UserModel.findOneAndUpdate(
+      { emailId: topic.createdBy },
+      {
+        assignedTopic: topic,
+      }
+    );
+    res.status(200).json({
+      success: true,
+    });
+  } catch (e) {
+    res.status(500).json({
+      success: false,
+      message: "could not update the topic",
     });
   }
 });
