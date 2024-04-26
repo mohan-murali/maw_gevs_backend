@@ -22,6 +22,10 @@ const userSchema = new Schema({
   assignedTopic: {
     type: topicSchema,
   },
+  approved: {
+    type: Boolean,
+    required: true,
+  },
 });
 
 module.exports = model("user", userSchema);

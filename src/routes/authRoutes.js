@@ -2,6 +2,7 @@ const { Router } = require("express");
 const UserModel = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const authHandler = require("../middleware/authHandler");
 
 const authRouter = Router();
 const JWT_KEY = process.env.JWT_KEY || "secret";
@@ -23,6 +24,7 @@ authRouter.post("/register", async (req, res) => {
         name,
         password,
         role,
+        approved: false,
       };
       let newUser = new UserModel(user);
       const salt = await bcrypt.genSalt(10);
@@ -66,7 +68,7 @@ authRouter.post("/login", async (req, res) => {
       //Check if the emailId and password is correct
       const user = await UserModel.findOne({ emailId });
 
-      if (user) {
+      if (user && user.approved) {
         const passwordMatched = await bcrypt.compare(password, user.password);
         if (passwordMatched) {
           console.log("JWT key is ", JWT_KEY);
@@ -88,7 +90,7 @@ authRouter.post("/login", async (req, res) => {
       }
       return res.status(401).json({
         success: false,
-        message: "User not found",
+        message: "User not found or is not yet approved by admin",
       });
     } else
       res.status(400).json({
@@ -100,6 +102,39 @@ authRouter.post("/login", async (req, res) => {
     res.status(500).json({
       success: false,
       message: `cannot retrieve user, error: ${err}`,
+    });
+  }
+});
+
+authRouter.get("/get-unapproved-user", async (req, res) => {
+  try {
+    const users = await UserModel.find({ approved: false });
+
+    res.status(200).json({
+      success: true,
+      users,
+    });
+  } catch (e) {
+    res.status(500).json({
+      success: false,
+      message: "could not get the user list",
+    });
+  }
+});
+
+authRouter.put("/approve-user", authHandler, async (req, res) => {
+  try {
+    const { id } = req.body;
+    const user = await UserModel.findById(id);
+    await user.updateOne({ approved: true });
+
+    res.status(200).json({
+      success: true,
+    });
+  } catch (e) {
+    res.status(500).json({
+      success: false,
+      message: "could not approve the user",
     });
   }
 });

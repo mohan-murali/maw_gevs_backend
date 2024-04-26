@@ -19,6 +19,10 @@ const prefrencesSchema = new Schema({
     type: topicSchema,
     required: true,
   },
+  assigned: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = model("prefrences", prefrencesSchema);
