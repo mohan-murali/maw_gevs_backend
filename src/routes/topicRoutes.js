@@ -246,38 +246,49 @@ topicRouter.get("/assign-topic", authHandler, async (req, res) => {
     const topicGroup = new Map();
     const topicGroupSize = new Map();
 
+    let stillUnassignedStudents = [];
+
+    console.log(unassignedStudents);
+
     for (const student of unassignedStudents) {
+      console.log(topicGroup);
       let assigned = false;
       let assignedTopic = {};
       const prefrence = prefrences.find((x) => x.emailId === student.emailId);
-      console.log(prefrence);
       if (prefrence) {
+        // console.log("prefrence is ->", prefrence);
         let topic1 = prefrence.prefrence1.topic;
-        if (topicGroup.has()) {
+        if (topicGroup.has(topic1)) {
           if (topicGroupSize.get(topic1) < maxGroupLength) {
             const group = topicGroup.get(topic1);
-            group.students.push(student.emailId);
+            // console.log("step3", group);
+            group.students = [...group.students, student.emailId];
+            console.log("students", group.students);
             assigned = true;
             assignedTopic = prefrence.prefrence1;
             topicGroupSize.set(topic1, topicGroupSize.get(topic1) + 1);
           }
         } else {
+          // console.log("test1", student.emailId);
           const newGroup = new GroupModel({
             topic: topic1,
             supervisor: prefrence.prefrence1.supervisor,
             students: [student.emailId],
           });
+          // console.log("step1", newGroup);
           topicGroup.set(topic1, newGroup);
+          // console.log("step2", topicGroup);
           topicGroupSize.set(topic1, 1);
           assigned = true;
           assignedTopic = prefrence.prefrence1;
         }
         if (!assigned) {
           let topic2 = prefrence.prefrence2.topic;
-          if (topicGroup.has()) {
+          if (topicGroup.has(topic2)) {
             if (topicGroupSize.get(topic2) < maxGroupLength) {
               const group = topicGroup.get(topic2);
-              group.students.push(student.emailId);
+              group.students = [...group.students, student.emailId];
+              console.log("students", group.students);
               assigned = true;
               assignedTopic = prefrence.prefrence2;
               topicGroupSize.set(topic2, topicGroupSize.get(topic2) + 1);
@@ -296,10 +307,11 @@ topicRouter.get("/assign-topic", authHandler, async (req, res) => {
         }
         if (!assigned) {
           let topic3 = prefrence.prefrence3.topic;
-          if (topicGroup.has()) {
+          if (topicGroup.has(topic3)) {
             if (topicGroupSize.get(topic3) < maxGroupLength) {
               const group = topicGroup.get(topic3);
-              group.students.push(student.emailId);
+              group.students = [...group.students, student.emailId];
+              console.log("students", group.students);
               assigned = true;
               assignedTopic = prefrence.prefrence3;
               topicGroupSize.set(topic3, topicGroupSize.get(topic3) + 1);
@@ -320,7 +332,8 @@ topicRouter.get("/assign-topic", authHandler, async (req, res) => {
           for (const [key, value] of topicGroupSize.entries()) {
             if (value < maxGroupLength) {
               const group = topicGroup.get(key);
-              group.students.push(student.emailId);
+              group.students = [...group.students, student.emailId];
+              console.log("students", group.students);
               assigned = true;
               assignedTopic = await TopicModel.findOne({ topic: key });
               topicGroupSize.set(key, value + 1);
@@ -328,16 +341,40 @@ topicRouter.get("/assign-topic", authHandler, async (req, res) => {
           }
         }
       } else {
-        for (const [key, value] of topicGroupSize.entries()) {
-          if (value < maxGroupLength) {
-            const group = topicGroup.get(key);
-            group.students.push(student.emailId);
-            assigned = true;
-            assignedTopic = await TopicModel.findOne({ topic: key });
-            topicGroupSize.set(key, value + 1);
+        if (topicGroupSize.size > 0) {
+          for (const [key, value] of topicGroupSize.entries()) {
+            if (value < maxGroupLength) {
+              const group = topicGroup.get(key);
+              group.students = [...group.students, student.emailId];
+              console.log("students", group.students);
+              assigned = true;
+              assignedTopic = await TopicModel.findOne({ topic: key });
+              topicGroupSize.set(key, value + 1);
+            }
           }
+        } else {
+          stillUnassignedStudents.push(student);
         }
       }
+
+      await UserModel.findByIdAndUpdate(student._id, {
+        assignedTopic,
+      });
+    }
+
+    console.log("unassigned students -> ,", stillUnassignedStudents);
+    console.log("topic groups are ->", topicGroup);
+
+    for (student of stillUnassignedStudents) {
+      for (const [key, value] of topicGroupSize.entries()) {
+        if (value < maxGroupLength) {
+          const group = topicGroup.get(key);
+          group.students = [...group.students, student.emailId];
+          assignedTopic = await TopicModel.findOne({ topic: key });
+          topicGroupSize.set(key, value + 1);
+        }
+      }
+
       await UserModel.findByIdAndUpdate(student._id, {
         assignedTopic,
       });
