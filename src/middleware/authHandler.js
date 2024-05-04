@@ -16,10 +16,10 @@ const authHandler = async (req, res, next) => {
 
   // Verify token
   try {
-    console.log("JWT_Key is ->", JWT_KEY);
     const usr = jwt.verify(token, JWT_KEY);
+    console.log(usr);
     const user = await UserModel.findById(usr.userId);
-req.user = user;
+    req.user = user;
     next();
   } catch (err) {
     console.log(err);

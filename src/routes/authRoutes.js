@@ -139,4 +139,52 @@ authRouter.put("/approve-user", authHandler, async (req, res) => {
   }
 });
 
+authRouter.get("/get-all-user", authHandler, async (req, res) => {
+  try {
+    const users = await UserModel.find({});
+
+    res.status(200).json({
+      success: true,
+      users,
+    });
+  } catch (e) {
+    res.status(500).json({
+      success: false,
+      message: "could not get the user list",
+    });
+  }
+});
+
+authRouter.get("/get-supervisors", authHandler, async (req, res) => {
+  try {
+    const users = await UserModel.find({ role: "Supervisor" });
+
+    res.status(200).json({
+      success: true,
+      users,
+    });
+  } catch (e) {
+    res.status(500).json({
+      success: false,
+      message: "could not get the user list",
+    });
+  }
+});
+
+authRouter.delete("/delete-user/:id", authHandler, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const response = await UserModel.findByIdAndDelete(id);
+    console.log(response);
+    res.status(200).json({
+      success: true,
+    });
+  } catch (e) {
+    res.status(500).json({
+      success: false,
+      message: "could not delete the user",
+    });
+  }
+});
+
 module.exports = authRouter;

@@ -10,6 +10,7 @@ const topicRouter = Router();
 topicRouter.post("/add-topic", authHandler, async (req, res) => {
   try {
     const { user } = req;
+    console.log(user);
     const { topic, supervisor, details, isCustom } = req.body;
     if (!topic || !supervisor || !details) {
       res.status(400).json({
