@@ -57,3 +57,6 @@ x-auth-token: eyJhbGciOiJIUzI-12NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWExNjg1Yzc
 ###
 GET http://localhost:5001/api/topic/assign-topic
 x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjA3YzIwYTJhMDlmNTNlODhjOWYyOTciLCJpYXQiOjE3MTQwNTYwNzcsImV4cCI6MTcxNDE0MjQ3N30.0sKhsn15XvaqacWnehy36Y6afgYEnRgyKXKAKtISsoI
+
+###
+GET http://localhost:5001/api/auth/update-students

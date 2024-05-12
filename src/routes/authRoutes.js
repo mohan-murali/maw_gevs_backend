@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const UserModel = require("../models/user");
+const GroupModel = require("../models/group");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const authHandler = require("../middleware/authHandler");
@@ -183,6 +184,35 @@ authRouter.delete("/delete-user/:id", authHandler, async (req, res) => {
     res.status(500).json({
       success: false,
       message: "could not delete the user",
+    });
+  }
+});
+
+authRouter.get("/update-students", async (req, res) => {
+  try {
+    const studentsWithTopics = await UserModel.find({
+      role: "Student",
+    });
+
+    for (let student of studentsWithTopics) {
+      await UserModel.findByIdAndUpdate(student._id, {
+        assignedTopic: null,
+      });
+    }
+
+    const groups = await GroupModel.find({});
+    for (let group of groups) {
+      await GroupModel.findByIdAndDelete(group._id);
+    }
+
+    res.status(200).json({
+      success: true,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      success: false,
+      message: "could not update the assigned topics",
     });
   }
 });
